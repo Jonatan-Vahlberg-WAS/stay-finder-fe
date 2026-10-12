@@ -1,15 +1,22 @@
-import type { DetailedHTMLProps, HTMLAttributes, ReactNode } from "react";
+import type { ComponentPropsWithoutRef } from "react";
+import { cn } from "@/utils/cn";
 
-type HeaderProps = DetailedHTMLProps<
-  HTMLAttributes<HTMLParagraphElement>,
-  HTMLParagraphElement
-> & {
+//? Inherited prop types from Paragraph element
+type HeaderProps = ComponentPropsWithoutRef<"p"> & {
   size?: "sm" | "md" | "lg";
 };
 
 const T = {
-  Header: ({ children, size, ...props }: HeaderProps) => {
-    const classes = `${size === "sm" ? "text-lg" : size === "lg" ? "text-2xl" : "text-xl"}`
+  Header: ({ children, size, className, ...props }: HeaderProps) => {
+    const classes = cn(
+      "font-bold",
+      {
+        "text-lg": size === "sm",
+        "text-xl": size === "md",
+        "text-2xl": size === "lg",
+      },
+      className,
+    );
     return (
       <p className={classes} {...props}>
         {children}

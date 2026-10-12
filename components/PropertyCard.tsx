@@ -1,13 +1,18 @@
 import type { Property } from "@/types/property";
+import { cn } from "@/utils/cn";
 import T from "./typography";
 
 type PropertyCardProps = {
   property: Property;
+  className?: string;
 };
 
-export default function PropertyCard({ property }: PropertyCardProps) {
+export default function PropertyCard({
+  property,
+  className,
+}: PropertyCardProps) {
   return (
-    <div className="shadow-md p-4 rounded-md">
+    <div className={cn("shadow-md p-4 rounded-md", className)}>
       [PROPERTY CARD]
       <T.Header size="lg">
         {property.title}
