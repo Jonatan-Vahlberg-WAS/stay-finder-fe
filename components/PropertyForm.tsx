@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { SubmitEvent, useState, type FormEvent } from "react";
 import type { CreatePropertyState } from "@/utils/propertyService";
 
 const fieldClassName =
@@ -31,7 +31,7 @@ export default function PropertyForm({
   const [error, setError] = useState<string>();
   const [pending, setPending] = useState(false);
 
-  async function onSubmit(event: FormEvent<HTMLFormElement>) {
+  async function onSubmit(event: SubmitEvent<HTMLFormElement>) {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
     setError(undefined);
