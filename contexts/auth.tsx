@@ -1,6 +1,6 @@
 "use client";
 
-import { login } from "@/utils/authService";
+import { getMe, login } from "@/utils/authService";
 import { createContext, useState, useEffect, useContext } from "react";
 import type { PropsWithChildren } from "react";
 
@@ -25,7 +25,7 @@ const AuthProvider = ({ children }: PropsWithChildren) => {
         if(!authenticated) {
             throw "Invalid credentials"
         }
-
+        await _getMe()
         return
 
     } catch (e) {
@@ -33,6 +33,23 @@ const AuthProvider = ({ children }: PropsWithChildren) => {
         return "invalid Credentials"
     }
   }
+
+  const _getMe = async () => {
+    try {
+        const user = await getMe()
+        if(!user) {
+            throw "User not found"
+        }
+        console.log("user", user)
+        setUser(user)
+    } catch (e) {
+        console.warn("error in getting me", e)
+    }
+  }
+
+  useEffect(() => {
+    _getMe()
+  }, [])
 
   return (
     <AuthContext.Provider

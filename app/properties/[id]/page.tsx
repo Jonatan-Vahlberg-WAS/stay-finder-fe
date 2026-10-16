@@ -1,3 +1,4 @@
+import PropertyBookerCard from "@/components/PropertyBookerCard";
 import T from "@/components/typography";
 import { getPropertyById } from "@/utils/propertyService";
 import Link from "next/link";
@@ -38,6 +39,7 @@ export default async function PropertyPage({
           <dd className="mt-1 text-lg font-semibold">{property.max_guests}</dd>
         </div>
       </dl>
+      <PropertyBookerCard property={property}/>
     </main>
   );
 }
