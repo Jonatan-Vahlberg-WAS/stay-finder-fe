@@ -19,6 +19,31 @@ export async function login(email: string, password: string) {
   return false;
 }
 
+export async function register(email: string, password: string) {
+  const url = new URL(`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/register/`);
+
+  const response = await fetch(url, {
+    method: "POST",
+    headers: {
+      "content-type": "application/json", // lets the browser store session cookies
+    },
+    credentials: "include",
+    body: JSON.stringify({
+      email,
+      password
+    }),
+  })
+  return response.ok
+}
+
+export async function logout() {
+  const url = new URL(`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/logout/`);
+
+  await fetch(url, {
+    method: "POST",
+    credentials: "include", // sends the cookie so the backend can clear it
+  });
+}
 
 export async function getMe(): Promise<AuthUser | null> {
   const url = new URL(`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/me/`);
