@@ -8,6 +8,13 @@ export default function AuthHeader(){
     const auth = useAuth()
 
     console.log("auth", auth)
+    if(auth.loading){
+        return (
+            <div>
+                <T.Header>Loading...</T.Header>
+            </div>
+        )
+    }
 
     return (
         <div>

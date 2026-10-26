@@ -6,6 +6,7 @@ import type { PropsWithChildren } from "react";
 
 type AuthContextState = {
   user: AuthUser | null;
+  loading?: boolean; // Add loading property to the context state
   login: (email: string, password: string) => Promise<void | string>
   register: (email: string, password: string) => Promise<void | string>
   logout: () => Promise<void>
@@ -13,6 +14,7 @@ type AuthContextState = {
 
 const defaultState: AuthContextState = {
   user: null,
+  loading: true,
   login: () => Promise.resolve(),
   register: () => Promise.resolve(),
   logout: () => Promise.resolve()
@@ -22,6 +24,7 @@ const AuthContext = createContext<AuthContextState>(defaultState);
 
 const AuthProvider = ({ children }: PropsWithChildren) => {
   const [user, setUser] = useState<typeof defaultState.user>(null);
+  const [loading, setLoading] = useState(true); // Add loading state
 
   const _login: typeof defaultState.login = async (email, password) => {
     try {
@@ -68,6 +71,8 @@ const AuthProvider = ({ children }: PropsWithChildren) => {
       setUser(user)
     } catch (e) {
       console.warn("error in getting me", e)
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -79,6 +84,7 @@ const AuthProvider = ({ children }: PropsWithChildren) => {
     <AuthContext.Provider
       value={{
         user,
+        loading,
         login: _login,
         register: _register,
         logout: _logout
