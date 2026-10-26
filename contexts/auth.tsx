@@ -6,11 +6,13 @@ import type { PropsWithChildren } from "react";
 
 type AuthContextState = {
   user: AuthUser | null;
+  isPending?: boolean
   login: (email: string, password: string) => Promise<void | string>
 };
 
 const defaultState: AuthContextState = {
   user: null,
+  isPending: true,
   login: () => Promise.resolve()
 };
 
@@ -18,6 +20,7 @@ const AuthContext = createContext<AuthContextState>(defaultState);
 
 const AuthProvider = ({ children }: PropsWithChildren) => {
   const [user, setUser] = useState<typeof defaultState.user>(null);
+  const [isPending, setIsPending] = useState(defaultState.isPending)
 
   const _login: typeof defaultState.login = async (email, password) => {
     try {
@@ -35,7 +38,9 @@ const AuthProvider = ({ children }: PropsWithChildren) => {
   }
 
   const _getMe = async () => {
+    setIsPending(true)
     try {
+      
         const user = await getMe()
         if(!user) {
             throw "User not found"
@@ -44,6 +49,8 @@ const AuthProvider = ({ children }: PropsWithChildren) => {
         setUser(user)
     } catch (e) {
         console.warn("error in getting me", e)
+    } finally {
+      setIsPending(false)
     }
   }
 
@@ -55,6 +62,7 @@ const AuthProvider = ({ children }: PropsWithChildren) => {
     <AuthContext.Provider
       value={{
         user,
+        isPending,
         login: _login
       }}
     >
